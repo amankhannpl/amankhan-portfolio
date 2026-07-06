@@ -5,10 +5,9 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const hostname = request.headers.get('host') || '';
 
-  // Capture anyone hitting your AI subdomain
+  // Catch traffic hitting the AI subdomain and redirect to Streamlit cleanly
   if (hostname.startsWith('ask.')) {
-    // Invisibly reverse-proxy to your live Streamlit container
-    return NextResponse.rewrite(new URL('https://meet-aman-portfolio.streamlit.app' + url.pathname + url.search));
+    return NextResponse.redirect(new URL('https://meet-aman-portfolio.streamlit.app' + url.pathname + url.search));
   }
 
   return NextResponse.next();
