@@ -5,9 +5,9 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const hostname = request.headers.get('host') || '';
 
-  // If the user goes to ask.amankhannpl.com, rewrite the route to our /ask page internally
   if (hostname.startsWith('ask.')) {
-    url.pathname = `/ask${url.pathname}`;
+    // Route traffic internally to the API data proxy stream
+    url.pathname = `/api/streamlit`;
     return NextResponse.rewrite(url);
   }
 
