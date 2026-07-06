@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const hostname = request.headers.get('host') || '';
 
-  // Catch traffic hitting the AI subdomain and redirect to Streamlit cleanly
+  // Check if someone is trying to access the ask subdomain
   if (hostname.startsWith('ask.')) {
     return NextResponse.redirect(new URL('https://meet-aman-portfolio.streamlit.app' + url.pathname + url.search));
   }
