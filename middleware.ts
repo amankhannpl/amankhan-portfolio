@@ -5,9 +5,10 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const hostname = request.headers.get('host') || '';
 
-  // Check if someone is trying to access the ask subdomain
+  // If the user goes to ask.amankhannpl.com, rewrite the route to our /ask page internally
   if (hostname.startsWith('ask.')) {
-    return NextResponse.redirect(new URL('https://meet-aman-portfolio.streamlit.app' + url.pathname + url.search));
+    url.pathname = `/ask${url.pathname}`;
+    return NextResponse.rewrite(url);
   }
 
   return NextResponse.next();
