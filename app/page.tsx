@@ -54,7 +54,7 @@ export default function HomePage() {
           </div>
           <div className="p-6 rounded-2xl border border-zinc-800/60 bg-zinc-900/20 space-y-2">
             <div className="text-pink-400 font-medium text-xs uppercase tracking-wider">Advanced Core Projects</div>
-            <h4 className="text-lg font-bold text-white">Hizlee Rider & Teknofest</h4>
+            <h4 className="text-lg font-bold text-white">Hizlee Rider Connect</h4>
             <p className="text-zinc-400 text-xs leading-relaxed">Engineering urban distribution models and intelligence assets optimized for high-performance architectural systems.</p>
           </div>
         </section>

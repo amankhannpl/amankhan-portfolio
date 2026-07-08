@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
-  // Python backend url'ini buraya entegre edeceğiz
   const PYTHON_API_URL = 'https://meet-aman-portfolio.streamlit.app/api/v1/chat'; 
 
   try {
@@ -18,8 +17,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ reply: data.reply || data.text });
   } catch {
+    // English fallback notification for system updates
     return NextResponse.json({ 
-      reply: "Şu anda sistemlerimde ufak bir güncelleme yapıyorum. Birkaç saniye içinde tekrar sorabilir misin?" 
+      reply: "I am currently performing a quick update on my systems. Eating Mo:Mo HEHE Could you please ask again in a few seconds?" 
     });
   }
 }
