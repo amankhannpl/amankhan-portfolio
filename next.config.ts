@@ -1,9 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  async redirects() {
+  async rewrites() {
     return [
       {
+        // Intercepts anyone coming from the ask subdomain
         source: '/:path*',
         has: [
           {
@@ -11,8 +12,8 @@ const nextConfig: NextConfig = {
             value: 'ask.amankhannpl.com',
           },
         ],
-        destination: 'https://meet-aman-portfolio.streamlit.app/:path*',
-        permanent: false,
+        // Silently rewrites the destination to your /ask subpage
+        destination: '/ask/:path*',
       },
     ];
   },
