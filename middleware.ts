@@ -5,9 +5,9 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const hostname = request.headers.get('host') || '';
 
+  // Eğer istek ask. subdomainine geldiyse, arka planda /ask sayfasına eşle
   if (hostname.startsWith('ask.')) {
-    // Route traffic internally to the API data proxy stream
-    url.pathname = `/api/streamlit`;
+    url.pathname = `/ask${url.pathname}`;
     return NextResponse.rewrite(url);
   }
 
