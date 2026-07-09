@@ -1,26 +1,20 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import Script from "next/script";
-
-const inter = Inter({ subsets: ["latin"] });
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Aman Khan Portfolio",
-  description: "Software Engineering & Global Trade Execution",
+  title: "Aman Khan | AI Builder & Creative Technologist",
+  description:
+    "A cinematic personal brand experience for Aman Khan, software engineer, AI builder, founder, and creative technologist.",
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en">
-      <head>
-        {/* Forces the browser to load Tailwind CSS utility scripts immediately */}
-        <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
-      </head>
-      <body className={`${inter.className} bg-[#09090b]`}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

@@ -4,16 +4,14 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        // Intercepts anyone coming from the ask subdomain
-        source: '/:path*',
+        source: "/:path*",
         has: [
           {
-            type: 'host',
-            value: 'ask.amankhannpl.com',
+            type: "host",
+            value: "ask.amankhannpl.com",
           },
         ],
-        // Silently rewrites the destination to your /ask subpage
-        destination: '/ask/:path*',
+        destination: "/ask/:path*",
       },
     ];
   },
