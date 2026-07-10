@@ -13,13 +13,9 @@ import {
   Mail,
   MousePointer2,
   Sparkles,
-  Terminal,
   Zap,
   Globe,
-  TrendingUp,
-  Package,
   BarChart3,
-  Truck,
   Network,
   MessageSquare,
 } from "lucide-react";
