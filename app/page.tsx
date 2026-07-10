@@ -1,14 +1,7 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  motion,
-  useMotionValueEvent,
-  useScroll,
-  useTransform,
-} from "framer-motion";
-import Lenis from "lenis";
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   ArrowUpRight,
   BrainCircuit,
@@ -22,42 +15,66 @@ import {
   Sparkles,
   Terminal,
   Zap,
+  Globe,
+  TrendingUp,
+  Package,
+  BarChart3,
+  Truck,
+  Network,
+  MessageSquare,
 } from "lucide-react";
 
-const HeroScene = dynamic(() => import("../components/HeroScene"), {
-  ssr: false,
-  loading: () => (
-    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(83,224,255,.12),transparent_36%)]" />
-  ),
-});
-
-const projects = [
+const bentoItems = [
   {
+    id: "orthosyn",
     title: "Orthosyn Medikal",
-    slug: "orthosyn-medikal",
-    eyebrow: "Asia Sales Manager",
-    summary:
-      "Cross-border B2B medical supply chain execution across Asia, combining international trade relations, logistics architecture, and high-trust commercial coordination.",
-    stack: ["B2B Sales", "Medical Supply", "Asia Markets", "Trade Logistics"],
-    accent: "from-signal/70 to-acid/60",
+    role: "Asia Sales Manager",
+    description: "Orchestrating international B2B medical supply chains and global market operations across Asia.",
+    icon: Globe,
+    gradient: "from-signal/20 to-signal/5",
+    borderColor: "border-signal/30",
+    textColor: "text-signal",
+    stats: [
+      { label: "Markets", value: "12+" },
+      { label: "Supply Chains", value: "Global" },
+      { label: "B2B Volume", value: "High" },
+    ],
+    features: ["International Trade", "Medical Supply", "Logistics Architecture", "Commercial Coordination"],
+    size: "large",
   },
   {
+    id: "ostim",
     title: "OSTIM OSB Foreign Trade",
-    slug: "ostim-osb-foreign-trade",
-    eyebrow: "Foreign Trade Analyst",
-    summary:
-      "Professional internship experience focused on international trade analytics, market research, export intelligence, and structured opportunity mapping.",
-    stack: ["Market Research", "Trade Analytics", "Export Strategy", "B2B Data"],
-    accent: "from-coral/70 to-pearl/50",
+    role: "Foreign Trade Analyst",
+    description: "Executing global trade data analytics and market research for export intelligence.",
+    icon: BarChart3,
+    gradient: "from-coral/20 to-coral/5",
+    borderColor: "border-coral/30",
+    textColor: "text-coral",
+    stats: [
+      { label: "Reports", value: "50+" },
+      { label: "Markets", value: "15+" },
+      { label: "Data Points", value: "10K+" },
+    ],
+    features: ["Trade Analytics", "Market Research", "Export Strategy", "B2B Intelligence"],
+    size: "medium",
   },
   {
+    id: "hizlee",
     title: "Hizlee Rider Connect",
-    slug: "hizlee-rider-connect",
-    eyebrow: "Logistics Platform Architecture",
-    summary:
-      "A tech-driven urban distribution model and software architecture project designed to connect riders, merchants, and delivery operations through a scalable logistics layer.",
-    stack: ["Platform Design", "Logistics", "Full Stack", "Urban Mobility"],
-    accent: "from-violet/70 to-signal/60",
+    role: "Logistics Platform Architecture",
+    description: "Tech-driven urban distribution model and logistics platform software architecture.",
+    icon: Network,
+    gradient: "from-violet/20 to-violet/5",
+    borderColor: "border-violet/30",
+    textColor: "text-violet",
+    stats: [
+      { label: "Architecture", value: "Full Stack" },
+      { label: "Model", value: "Urban" },
+      { label: "Scale", value: "Scalable" },
+    ],
+    features: ["Platform Design", "Logistics", "Software Architecture", "Urban Mobility"],
+    size: "medium",
   },
 ];
 
@@ -74,7 +91,7 @@ const experiences = [
   },
   {
     title: "Creative Technology",
-    body: "Merging motion, interaction, 3D, and storytelling into memorable digital moments.",
+    body: "Merging motion, interaction, and storytelling into memorable digital moments.",
     icon: MousePointer2,
   },
   {
@@ -93,116 +110,43 @@ const skills = [
   "Trade Analytics",
   "Supply Chains",
   "UX Systems",
-  "Framer Motion",
   "Startups",
 ];
 
 export default function Home() {
   const [ready, setReady] = useState(false);
-  const [hiddenNav, setHiddenNav] = useState(false);
-  const [cursor, setCursor] = useState({ x: 0, y: 0 });
-  const lastY = useRef(0);
-
-  const { scrollYProgress, scrollY } = useScroll();
-  const heroScale = useTransform(scrollYProgress, [0, 0.18], [1, 0.88]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0.28]);
 
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.18,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    });
-
-    let frame = 0;
-
-    const raf = (time: number) => {
-      lenis.raf(time);
-      frame = requestAnimationFrame(raf);
-    };
-
-    frame = requestAnimationFrame(raf);
-
-    const timer = window.setTimeout(() => {
-      setReady(true);
-    }, 1150);
-
-    return () => {
-      cancelAnimationFrame(frame);
-      window.clearTimeout(timer);
-      lenis.destroy();
-    };
+    const timer = setTimeout(() => setReady(true), 800);
+    return () => clearTimeout(timer);
   }, []);
-
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    setHiddenNav(latest > lastY.current && latest > 140);
-    lastY.current = latest;
-  });
-
-  useEffect(() => {
-    const move = (event: PointerEvent) => {
-      setCursor({ x: event.clientX, y: event.clientY });
-    };
-
-    window.addEventListener("pointermove", move);
-
-    return () => {
-      window.removeEventListener("pointermove", move);
-    };
-  }, []);
-
-  const navItems = useMemo(
-    () => ["Work", "About", "Projects", "AI", "Contact"],
-    []
-  );
 
   return (
-    <main className="min-h-screen overflow-hidden bg-ink text-pearl">
-      <motion.div
-        className="pointer-events-none fixed z-50 hidden h-5 w-5 rounded-full border border-pearl/60 mix-blend-difference md:block"
-        animate={{ x: cursor.x - 10, y: cursor.y - 10 }}
-        transition={{ type: "spring", stiffness: 360, damping: 32, mass: 0.4 }}
-      />
-
-      <motion.div
-        className="fixed inset-0 z-[80] grid place-items-center bg-ink"
-        initial={false}
-        animate={
-          ready
-            ? { y: "-105%", filter: "blur(18px)" }
-            : { y: 0, filter: "blur(0px)" }
-        }
-        transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
+    <main className="min-h-screen bg-black text-pearl">
+      {/* Loading Screen */}
+      <div
+        className={`fixed inset-0 z-[80] grid place-items-center bg-black transition-all duration-1000 ease-in-out ${
+          ready ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
+        }`}
       >
         <div className="relative grid h-44 w-44 place-items-center">
-          <motion.div
-            className="absolute inset-0 border border-pearl/20"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-          />
-          <motion.div
-            className="absolute inset-6 border border-acid/40"
-            animate={{ rotate: -360, scale: [1, 0.86, 1] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          />
+          <div className="absolute inset-0 border border-pearl/20 animate-spin-slow" />
+          <div className="absolute inset-6 border border-acid/40 animate-spin-slow" style={{ animationDirection: "reverse" }} />
           <div className="font-display text-4xl tracking-normal">AK</div>
           <div className="absolute bottom-0 text-xs uppercase text-pearl/50">
             initializing signal
           </div>
         </div>
-      </motion.div>
+      </div>
 
-      <motion.nav
-        className="fixed left-4 right-4 top-5 z-40 mx-auto flex max-w-5xl items-center justify-between border border-white/10 bg-black/35 px-4 py-3 shadow-2xl shadow-black/30 backdrop-blur-xl md:px-5"
-        animate={{ y: hiddenNav ? -100 : 0, opacity: hiddenNav ? 0 : 1 }}
-        transition={{ duration: 0.45, ease: "easeOut" }}
-      >
+      {/* Navigation */}
+      <nav className="fixed left-4 right-4 top-5 z-40 mx-auto flex max-w-5xl items-center justify-between border border-white/10 bg-black/35 px-4 py-3 shadow-2xl shadow-black/30 backdrop-blur-xl md:px-5">
         <a href="#home" className="font-display text-lg">
           AMAN.
         </a>
 
         <div className="hidden items-center gap-6 text-xs uppercase text-pearl/60 md:flex">
-          {navItems.map((item) => (
+          {["Work", "About", "Contact"].map((item) => (
             <a
               key={item}
               href={`#${item.toLowerCase()}`}
@@ -220,20 +164,16 @@ export default function Home() {
         >
           <Mail size={16} />
         </a>
-      </motion.nav>
+      </nav>
 
-      <section id="home" className="relative min-h-[112svh] overflow-hidden">
-        <HeroScene />
-
-        <motion.div
-          style={{ scale: heroScale, opacity: heroOpacity }}
-          className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-end px-5 pb-20 pt-32 md:px-10 md:pb-24"
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={ready ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.8, duration: 0.9 }}
-            className="mb-8 flex flex-wrap items-center gap-3 text-xs uppercase text-pearl/60"
+      {/* Hero Section */}
+      <section id="home" className="relative min-h-screen flex items-center justify-center px-5 pt-20">
+        <div className="relative z-10 mx-auto max-w-7xl text-center">
+          <div
+            className={`mb-8 flex flex-wrap items-center justify-center gap-3 text-xs uppercase text-pearl/60 opacity-0 ${
+              ready ? "animate-fade-in" : ""
+            }`}
+            style={{ animationDelay: "0.3s" }}
           >
             <span className="border border-pearl/15 px-3 py-2">
               Software engineer
@@ -244,81 +184,157 @@ export default function Home() {
             <span className="border border-pearl/15 px-3 py-2">
               Global operator
             </span>
-          </motion.div>
+          </div>
 
-          <h1 className="max-w-6xl font-display text-[clamp(4.2rem,12vw,12.8rem)] font-medium leading-[0.82] tracking-normal">
+          <h1
+            className={`max-w-6xl mx-auto font-display text-[clamp(3rem,10vw,8rem)] font-medium leading-[0.9] tracking-normal opacity-0 ${
+              ready ? "animate-slide-up" : ""
+            }`}
+            style={{ animationDelay: "0.5s" }}
+          >
             Building intelligent systems for the real world.
           </h1>
 
-          <div className="mt-10 grid gap-8 md:grid-cols-[1fr_.7fr] md:items-end">
-            <p className="max-w-xl text-lg leading-8 text-pearl/68 md:text-xl">
-              Aman Khan connects software engineering, AI product thinking,
-              international trade, and logistics execution into one unusually
-              practical builder profile.
-            </p>
+          <p
+            className={`mt-8 max-w-2xl mx-auto text-lg leading-8 text-pearl/68 md:text-xl opacity-0 ${
+              ready ? "animate-slide-up" : ""
+            }`}
+            style={{ animationDelay: "0.7s" }}
+          >
+            Aman Khan connects software engineering, AI product thinking,
+            international trade, and logistics execution into one unusually
+            practical builder profile.
+          </p>
+        </div>
 
-            <a
-              href="#projects"
-              className="group inline-flex w-fit items-center gap-3 border border-pearl/15 px-5 py-4 text-sm uppercase text-pearl/80 transition hover:border-acid hover:text-acid"
-            >
-              Enter the work
-              <ArrowUpRight
-                className="transition group-hover:translate-x-1 group-hover:-translate-y-1"
-                size={18}
-              />
-            </a>
-          </div>
-        </motion.div>
+        {/* Background gradient */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(83,224,255,.08),transparent_50%)] pointer-events-none" />
       </section>
 
+      {/* Bento Grid Section */}
       <section id="work" className="relative px-5 py-24 md:px-10 md:py-36">
         <div className="mx-auto max-w-7xl">
-          <SceneLabel icon={<Diamond size={15} />} text="Operating thesis" />
+          <div className="mb-12 inline-flex items-center gap-3 border border-white/10 px-3 py-2 text-xs uppercase text-pearl/45">
+            <Diamond size={15} />
+            <span>Professional pillars</span>
+          </div>
 
-          <div className="grid gap-10 md:grid-cols-[.9fr_1.1fr] md:items-start">
-            <h2 className="font-display text-[clamp(2.6rem,7vw,7.5rem)] leading-[0.92]">
-              Strategy becomes stronger when it can ship.
-            </h2>
+          <h2 className="mb-16 font-display text-[clamp(2.5rem,6vw,5rem)] leading-[0.92]">
+            Real work. Sharp systems.
+          </h2>
 
-            <div className="space-y-8 pt-2 text-xl leading-9 text-pearl/68">
-              <RevealText text="The best builders understand both code and consequence: how a product moves through markets, how operations break under pressure, and how intelligent systems can make execution feel lighter." />
+          {/* Bento Grid */}
+          <div className="grid gap-4 md:grid-cols-2 md:grid-rows-2">
+            {bentoItems.map((item, index) => (
+              <div
+                key={item.id}
+                className={`group relative overflow-hidden border ${item.borderColor} bg-gradient-to-br ${item.gradient} p-6 md:p-8 transition-all duration-500 hover:scale-[1.02] hover:shadow-glow opacity-0 animate-slide-up`}
+                style={{
+                  animationDelay: `${0.2 + index * 0.15}s`,
+                  gridRow: item.size === "large" ? "span 2" : "span 1",
+                }}
+              >
+                {/* Icon */}
+                <div className={`mb-6 flex h-14 w-14 items-center justify-center border ${item.borderColor} ${item.textColor} transition group-hover:scale-110`}>
+                  <item.icon size={28} />
+                </div>
 
-              <div className="grid grid-cols-3 gap-px bg-white/10">
-                {[
-                  ["3", "real-world tracks"],
-                  ["B2B", "trade execution"],
-                  ["AI", "product direction"],
-                ].map(([value, label]) => (
-                  <div key={label} className="bg-ink p-5">
-                    <div className="font-display text-4xl">{value}</div>
-                    <div className="mt-2 text-xs uppercase text-pearl/45">
-                      {label}
+                {/* Content */}
+                <div className="text-xs uppercase text-pearl/45 mb-2">
+                  {item.role}
+                </div>
+
+                <h3 className="font-display text-2xl md:text-3xl mb-4">
+                  {item.title}
+                </h3>
+
+                <p className="text-base leading-7 text-pearl/70 mb-6">
+                  {item.description}
+                </p>
+
+                {/* Stats */}
+                <div className="grid grid-cols-3 gap-3 mb-6">
+                  {item.stats.map((stat) => (
+                    <div key={stat.label} className="bg-black/30 p-3 border border-white/5">
+                      <div className="font-display text-xl md:text-2xl">{stat.value}</div>
+                      <div className="mt-1 text-xs uppercase text-pearl/40">
+                        {stat.label}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+
+                {/* Features */}
+                <div className="flex flex-wrap gap-2">
+                  {item.features.map((feature) => (
+                    <span
+                      key={feature}
+                      className="border border-white/10 px-3 py-1.5 text-xs uppercase text-pearl/50 bg-black/20"
+                    >
+                      {feature}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Hover glow effect */}
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none`}
+                />
               </div>
-            </div>
+            ))}
+
+            {/* AI Chat CTA Card */}
+            <Link
+              href="https://ask.amankhannpl.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative overflow-hidden border border-acid/30 bg-gradient-to-br from-acid/10 to-acid/5 p-6 md:p-8 transition-all duration-500 hover:scale-[1.02] hover:shadow-glow-acid opacity-0 animate-slide-up flex flex-col justify-center items-center text-center"
+              style={{ animationDelay: "0.8s" }}
+            >
+              {/* Pulsing glow effect */}
+              <div className="absolute inset-0 bg-acid/5 animate-pulse-slow" />
+              
+              <div className="relative z-10 flex h-16 w-16 items-center justify-center border border-acid/50 text-acid mb-4 transition group-hover:scale-110 group-hover:shadow-glow-acid">
+                <MessageSquare size={32} />
+              </div>
+
+              <h3 className="relative z-10 font-display text-2xl md:text-3xl mb-3 text-acid">
+                Chat with AI
+              </h3>
+
+              <p className="relative z-10 text-base leading-7 text-pearl/70 mb-6">
+                Ask questions about my work, experience, or connect directly through my AI assistant.
+              </p>
+
+              <div className="relative z-10 inline-flex items-center gap-2 text-acid text-sm uppercase transition group-hover:gap-3">
+                <span>ask.amankhannpl.com</span>
+                <ArrowUpRight size={18} />
+              </div>
+
+              {/* Gradient overlay on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-acid/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
+            </Link>
           </div>
         </div>
       </section>
 
+      {/* Experience Section */}
       <section id="about" className="px-5 py-24 md:px-10 md:py-36">
         <div className="mx-auto max-w-7xl">
-          <SceneLabel icon={<Sparkles size={15} />} text="The builder profile" />
+          <div className="mb-12 inline-flex items-center gap-3 border border-white/10 px-3 py-2 text-xs uppercase text-pearl/45">
+            <Sparkles size={15} />
+            <span>The builder profile</span>
+          </div>
 
           <div className="grid gap-4 md:grid-cols-4">
             {experiences.map((experience, index) => {
               const Icon = experience.icon;
 
               return (
-                <motion.article
+                <article
                   key={experience.title}
-                  className="group min-h-72 border border-white/10 bg-white/[0.025] p-6 transition hover:border-acid/60 hover:bg-white/[0.05]"
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-80px" }}
-                  transition={{ delay: index * 0.08, duration: 0.7 }}
-                  whileHover={{ y: -8, rotateX: 3, rotateY: -3 }}
+                  className="group min-h-72 border border-white/10 bg-white/[0.02] p-6 transition-all duration-500 hover:border-acid/60 hover:bg-white/[0.05] hover:-translate-y-2 opacity-0 animate-slide-up"
+                  style={{ animationDelay: `${0.9 + index * 0.1}s` }}
                 >
                   <div className="mb-16 flex h-11 w-11 items-center justify-center border border-white/10 text-acid transition group-hover:scale-110">
                     <Icon size={22} />
@@ -329,174 +345,48 @@ export default function Home() {
                   <p className="mt-5 text-sm leading-7 text-pearl/58">
                     {experience.body}
                   </p>
-                </motion.article>
+                </article>
               );
             })}
           </div>
         </div>
       </section>
 
-      <section id="projects" className="px-5 py-24 md:px-10 md:py-36">
-        <div className="mx-auto max-w-7xl">
-          <SceneLabel icon={<Cpu size={15} />} text="Selected experience" />
-
-          <div className="mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <h2 className="max-w-4xl font-display text-[clamp(3rem,8vw,8rem)] leading-[0.9]">
-              Real work. Sharp systems.
-            </h2>
-
-            <p className="max-w-sm text-pearl/58">
-              Three proof points across international medical trade, export
-              analytics, and logistics platform architecture.
-            </p>
-          </div>
-
-          <div className="space-y-6">
-            {projects.map((project, index) => (
-              <motion.a
-                href={`/projects/${project.slug}`}
-                key={project.title}
-                className="group relative block overflow-hidden border border-white/10 bg-white/[0.025] p-5 md:p-8"
-                initial={{ opacity: 0, y: 44 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.25 }}
-                transition={{ duration: 0.75, delay: index * 0.08 }}
-              >
-                <div
-                  className={`absolute inset-y-0 right-0 w-2/3 bg-gradient-to-l ${project.accent} opacity-0 blur-3xl transition duration-700 group-hover:opacity-25`}
-                />
-
-                <div className="relative grid gap-8 md:grid-cols-[.8fr_1.2fr_.35fr] md:items-center">
-                  <div className="aspect-[16/10] overflow-hidden border border-white/10 bg-black">
-                    <div
-                      className={`h-full w-full bg-gradient-to-br ${project.accent} opacity-80 transition duration-700 group-hover:scale-110`}
-                    />
-                  </div>
-
-                  <div>
-                    <div className="text-xs uppercase text-pearl/45">
-                      {project.eyebrow}
-                    </div>
-
-                    <h3 className="mt-3 font-display text-[clamp(2.3rem,6vw,6rem)] leading-none">
-                      {project.title}
-                    </h3>
-
-                    <p className="mt-6 max-w-2xl text-lg leading-8 text-pearl/62">
-                      {project.summary}
-                    </p>
-
-                    <div className="mt-7 flex flex-wrap gap-2">
-                      {project.stack.map((item) => (
-                        <span
-                          key={item}
-                          className="border border-white/10 px-3 py-2 text-xs uppercase text-pearl/50"
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="justify-self-start md:justify-self-end">
-                    <span className="grid h-14 w-14 place-items-center border border-white/10 transition group-hover:border-acid group-hover:text-acid">
-                      <ArrowUpRight />
-                    </span>
-                  </div>
-                </div>
-              </motion.a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="ai" className="relative px-5 py-24 md:px-10 md:py-36">
-        <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[.9fr_1.1fr] md:items-center">
-          <div>
-            <SceneLabel icon={<BrainCircuit size={15} />} text="AI systems" />
-
-            <h2 className="font-display text-[clamp(3rem,8vw,8rem)] leading-[0.9]">
-              Intelligence with operational memory.
-            </h2>
-
-            <p className="mt-8 max-w-xl text-lg leading-8 text-pearl/62">
-              Aman&apos;s AI direction is grounded in real workflows: trade
-              research, logistics planning, market intelligence, and products
-              that help people make better decisions faster.
-            </p>
-          </div>
-
-          <div className="border border-white/10 bg-[#080808] p-4 shadow-2xl shadow-black">
-            <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-4 text-xs uppercase text-pearl/45">
-              <span className="inline-flex items-center gap-2">
-                <Terminal size={14} />
-                aman.ai
-              </span>
-              <span>live protocol</span>
-            </div>
-
-            <div className="space-y-4 font-mono text-sm">
-              {[
-                ["input", "analyze a new international market opportunity"],
-                [
-                  "model",
-                  "detect demand signals, buyer segments, logistics constraints",
-                ],
-                [
-                  "output",
-                  "market brief, risk map, outreach plan, execution checklist",
-                ],
-              ].map(([label, value], index) => (
-                <motion.div
-                  key={label}
-                  className="grid gap-3 border border-white/10 bg-white/[0.02] p-4 md:grid-cols-[100px_1fr]"
-                  initial={{ opacity: 0, x: 24 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.18 }}
-                >
-                  <span className="text-acid">{label}</span>
-                  <span className="text-pearl/70">{value}</span>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
+      {/* Skills Section */}
       <section className="px-5 py-24 md:px-10 md:py-36">
         <div className="mx-auto max-w-7xl">
-          <SceneLabel icon={<Cpu size={15} />} text="Skill constellation" />
+          <div className="mb-12 inline-flex items-center gap-3 border border-white/10 px-3 py-2 text-xs uppercase text-pearl/45">
+            <Cpu size={15} />
+            <span>Skill constellation</span>
+          </div>
 
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-5">
             {skills.map((skill, index) => (
-              <motion.div
+              <div
                 key={skill}
-                className="flex aspect-square items-end border border-white/10 bg-white/[0.025] p-4 font-display text-2xl transition hover:border-signal/70 hover:text-signal"
-                initial={{ opacity: 0, scale: 0.88 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.035, duration: 0.45 }}
+                className="flex aspect-square items-end border border-white/10 bg-white/[0.02] p-4 font-display text-xl transition-all duration-500 hover:border-signal/70 hover:text-signal hover:-translate-y-1 opacity-0 animate-scale-in"
+                style={{ animationDelay: `${1.3 + index * 0.05}s` }}
               >
                 {skill}
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* Contact Section */}
       <section id="contact" className="px-5 py-24 md:px-10 md:py-36">
         <div className="mx-auto max-w-7xl border-t border-white/10 pt-16">
           <p className="mb-8 text-xs uppercase text-pearl/45">Contact</p>
 
-          <h2 className="max-w-5xl font-display text-[clamp(3.5rem,10vw,11rem)] leading-[0.86]">
+          <h2 className="max-w-5xl font-display text-[clamp(3rem,8vw,7rem)] leading-[0.86]">
             Let&apos;s build something unforgettable.
           </h2>
 
           <div className="mt-12 flex flex-wrap gap-4">
             <a
               href="mailto:hello@amankhannpl.com"
-              className="inline-flex items-center gap-3 border border-acid/50 px-5 py-4 text-acid transition hover:bg-acid hover:text-ink"
+              className="inline-flex items-center gap-3 border border-acid/50 px-5 py-4 text-acid transition hover:bg-acid hover:text-black"
             >
               <Mail size={18} />
               Start a conversation
@@ -521,33 +411,5 @@ export default function Home() {
         </div>
       </section>
     </main>
-  );
-}
-
-function SceneLabel({
-  icon,
-  text,
-}: {
-  icon: React.ReactNode;
-  text: string;
-}) {
-  return (
-    <div className="mb-8 inline-flex items-center gap-3 border border-white/10 px-3 py-2 text-xs uppercase text-pearl/45">
-      {icon}
-      {text}
-    </div>
-  );
-}
-
-function RevealText({ text }: { text: string }) {
-  return (
-    <motion.p
-      initial={{ opacity: 0, y: 28, filter: "blur(10px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, margin: "-120px" }}
-      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {text}
-    </motion.p>
   );
 }
